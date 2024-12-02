@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Evoscape</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@0.9.490/build/spline-viewer.js"></script>
+    <style>
+        * {
+            margin-left: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            color: #1a1a1a;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .background spline-viewer {
+            width: 100%;
+            height: 100vh;
+            opacity: 0.8;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
+        /* Adjust sections to handle background */
+        .scroll-section {
+            position: relative;
+            background: transparent;
+        }
+
+        #home {
+            position: relative;
+            overflow: visible;
+        }
+
+        #home .background {
+            position: absolute;
+            opacity: 1;
+            pointer-events: none;
+        }
+
+        #home .background spline-viewer {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        #services {
+            background: rgba(255, 255, 255, 0.95);
+            margin-top: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Custom Cursor with subtle lag */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            z-index: 9999;
+            transition: all 0.08s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .cursor.hovering {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #4a90e2;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: var(--opacity); }
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color:#5f9ede;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .clock {
+            font-size: 15px;
+            color: #080808;
+            opacity: 0.9;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #1a1a1a;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            background: linear-gradient(135deg, #4a90e2, #67b26f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            color: #4a4a4a;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .button.primary {
+            background: rgba(74, 144, 226, 0.2);
+            border-color: rgba(74, 144, 226, 0.3);
+            color: #4a90e2;
+        }
+
+        .button:hover {
+            background: rgba(74, 144, 226, 0.3);
+            border-color: rgba(74, 144, 226, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: none;
+            transition: transform 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #1a1a1a;
+        }
+
+        /* Scroll Container */
+        .scroll-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            position: relative;
+        }
+
+        /* Scroll Sections */
+        .scroll-section {
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            left: calc(100% - 80px);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .scroll-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(74, 144, 226, 0.2);
+            cursor: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .scroll-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .scroll-dot.active {
+            background: #4a90e2;
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+        }
+
+        .scroll-dot::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .scroll-dot:hover::before {
+            opacity: 1;
+        }
+
+        /* Adjust existing sections */
+        .content {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .services-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: 0;
+        }
+
+        /* Scroll Down Indicator */
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: none;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Services Section Styles */
+        .services-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #4a90e2, #67b26f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 2.5rem;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.05),
+                inset 0 0 20px rgba(255, 255, 255, 0.2),
+                0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+            animation: shine 1.5s ease;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            pointer-events: none;
+        }
+
+        .service-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #67b26f;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+            text-shadow: 0 0 10px rgba(103, 178, 111, 0.3);
+        }
+
+        .service-card:hover .icon {
+            transform: scale(1.1);
+        }
+
+        .service-card h3 {
+            color: #1a1a1a;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card p {
+            color: rgba(26, 26, 26, 0.8);
+            line-height: 1.6;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            font-size: 0.95rem;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.08),
+                inset 0 0 30px rgba(255, 255, 255, 0.3),
+                0 0 40px rgba(255, 255, 255, 0.2);
+        }
+
+        .service-card .stats {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(116, 245, 137, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #67b26f;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-card:hover .stats {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Add glass reflection effect */
+        @keyframes shine {
+            from {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            to {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        /* Custom Cursor */
+        * {
+            cursor: none;
+        }
+
+        a, button, .scroll-dot {
+            cursor: none;
+        }
+
+        a:hover ~ .cursor,
+        button:hover ~ .cursor,
+        .scroll-dot:hover ~ .cursor {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        .contact-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .contact-title {
+            font-size: 4rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #4a90e2, #67b26f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+
+        .contact-form {
+            width: 100%;
+            max-width: 800px;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #000000;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(74, 144, 226, 0.5);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #1a1a1a;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:hover {
+            border-color: rgba(74, 144, 226, 0.7);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: rgba(74, 144, 226, 0.9);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .budget-select {
+            position: relative;
+        }
+
+        .budget-select select {
+            appearance: none;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(74, 144, 226, 0.5);
+            border-radius: 8px;
+            color: #000000;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .budget-select select:focus {
+            outline: none;
+            border-color: rgba(74, 144, 226, 0.9);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .budget-select select option {
+            background: #ffffff;
+            color: #1a1a1a;
+            padding: 0.5rem;
+        }
+
+        .budget {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(74, 144, 226, 0.5);
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+
+        .budget:hover {
+            border-color: rgba(74, 144, 226, 0.7);
+            background-color: #ffffff;
+        }
+
+        .budget:focus {
+            outline: none;
+            border-color: rgba(74, 144, 226, 0.9);
+            background-color: #ffffff;
+        }
+
+        .budget option {
+            color: #1a1a1a;
+            background-color: #ffffff;
+            padding: 0.5rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #4a90e2, #67b26f);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+            transition: 0.5s;
+        }
+
+        @media (max-width: 768px) {
+            .contact-title {
+                font-size: 3rem;
+            }
+            .contact-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div class="background">
+        <spline-viewer url="https://prod.spline.design/IwFQ6ZGjnHaWV3kc/scene.splinecode" width="1920" height="1080"></spline-viewer>
+        <div class="stars" id="stars"></div>
+    </div>
+
+    <nav class="nav">
+        <div class="logo">
+            Evoscape
+            <div class="clock" id="clock"></div>
+        </div>
+        <div class="nav-links">
+            <a href="#home">Accueil</a>
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-dot active" data-tooltip="Accueil" data-section="home"></div>
+        <div class="scroll-dot" data-tooltip="Services" data-section="services"></div>
+        <div class="scroll-dot" data-tooltip="Contact" data-section="contact"></div>
+    </div>
+
+    <div class="scroll-container">
+        <!-- Home Section -->
+        <section id="home" class="scroll-section">
+            <div class="content">
+                <h1>Welcome to the future of digital evolution</h1>
+                <p class="subtitle">Experience the next generation of innovative solutions designed to transform your digital landscape.</p>
+                <div class="buttons">
+                    <a href="#services" class="button primary">Our Services</a>
+                    <div class="button-group">
+                        <a href="#contact" class="button">Contact Us</a>
+                        <button class="icon-btn" aria-label="Additional options">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="scroll-section services-section">
+            <h2 class="services-title">Nos Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="stats">+25%</div>
+                    <div class="icon">🎨</div>
+                    <h3>Design Innovant</h3>
+                    <p>Création de designs modernes et innovants adaptés à votre image de marque et vos objectifs commerciaux.</p>
+                </div>
+                <div class="service-card">
+                    <div class="stats">+40%</div>
+                    <div class="icon">💻</div>
+                    <h3>Développement Web</h3>
+                    <p>Solutions web personnalisées utilisant les dernières technologies pour une expérience utilisateur optimale.</p>
+                </div>
+                <div class="service-card">
+                    <div class="stats">+15%</div>
+                    <div class="icon">📱</div>
+                    <h3>Applications Mobiles</h3>
+                    <p>Développement d'applications mobiles intuitives et performantes pour iOS et Android.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="scroll-section contact-section">
+            <h2 class="contact-title">Nous contacter</h2>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Nom Complet</label>
+                    <input type="text" id="name" class="form-control" placeholder="David Leroix">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="contact@agencypro.fr">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Sujet</label>
+                    <input type="text" id="subject" class="form-control" placeholder="Chatbot IA - Immobilier">
+                </div>
+                <div class="form-group">
+                    <label for="message">Comment pouvons-nous vous aider ?</label>
+                    <textarea id="message" class="form-control" placeholder="Détaillez votre projet"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="budget">Quel est votre budget pour ce project ?</label>
+                    <div class="budget-select">
+                        <select id="budget" class="budget">
+                            <option value="">Sélectionnez votre budget</option>
+                            <option value="5000-10000">5 000€ - 10 000€</option>
+                            <option value="10000-20000">10 000€ - 20 000€</option>
+                            <option value="20000-50000">20 000€ - 50 000€</option>
+                            <option value="50000+">50 000€ +</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Envoyer</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        // Create stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 50;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size between 1 and 3 pixels
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                star.style.left = `${left}%`;
+                star.style.top = `${top}%`;
+                
+                // Random animation duration between 3 and 6 seconds
+                star.style.setProperty('--duration', `${3 + Math.random() * 3}s`);
+                
+                // Random opacity between 0.2 and 0.7
+                star.style.setProperty('--opacity', `${0.2 + Math.random() * 0.5}`);
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 3}s`;
+
+                // Add data attributes for parallax effect
+                star.dataset.x = left;
+                star.dataset.y = top;
+                // Random parallax intensity (movement speed)
+                star.dataset.parallaxSpeed = 0.1 + Math.random() * 0.2;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Scroll indicator
+        const sections = document.querySelectorAll('.scroll-section');
+        const dots = document.querySelectorAll('.scroll-dot');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    updateActiveDot(sectionId);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        function updateActiveDot(sectionId) {
+            dots.forEach(dot => {
+                if (dot.dataset.section === sectionId) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Click on dots to scroll
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const sectionId = dot.dataset.section;
+                document.getElementById(sectionId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Custom cursor with subtle lag
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function updateCursor() {
+            const ease = 0.15;
+            
+            cursorX += (mouseX - cursorX) * ease;
+            cursorY += (mouseY - cursorY) * ease;
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursor.style.transform = 'translate(-50%, -50%)';
+            
+            requestAnimationFrame(updateCursor);
+        }
+
+        updateCursor();
+
+        // Reposition background for home section
+        const homeSection = document.getElementById('home');
+        const background = document.querySelector('.background');
+        const servicesSection = document.getElementById('services');
+
+        // Move background to home section
+        homeSection.appendChild(background.cloneNode(true));
+        background.remove();
+
+        // Add scroll handler for parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * 0.5;
+            
+            // Parallax effect on home section while maintaining float animation
+            const background = homeSection.querySelector('.background');
+            background.style.transform = `translateY(${rate}px)`;
+            
+            // Fade out as we scroll to services
+            const opacity = 1 - (scrolled / window.innerHeight);
+            background.style.opacity = Math.max(opacity, 0);
+        });
+
+        // Clock
+        function updateClock() {
+            const clockElement = document.getElementById('clock');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            clockElement.textContent = timeString;
+        }
+
+        // Update clock immediately and then every second
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Initialize
+        createStars();
+    </script>
+</body>
+</html>
