@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Evoscape</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -144,6 +145,14 @@
             color: #080808;
             opacity: 0.9;
             font-family: 'Inter', sans-serif;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
         }
 
         .nav-links {
@@ -519,188 +528,196 @@
             transform: translate(-50%, -50%) scale(1.5);
         }
 
-        .contact-section {
-            min-height: 100vh;
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-top: -100px;  
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-title {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #1a1a1a, #4a4a4a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .about-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            perspective: 1000px;
+        }
+
+        .service-card-container {
+            min-height: 400px;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .service-card-container.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .service-card-front,
+        .service-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 4rem 2rem;
-            position: relative;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .contact-title {
-            font-size: 4rem;
-            margin-bottom: 3rem;
-            background: linear-gradient(45deg, #4a90e2, #67b26f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .contact-form {
-            width: 100%;
-            max-width: 800px;
-            padding: 3rem;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .service-card-back {
+            transform: rotateY(180deg);
+            background: rgba(255, 255, 255, 0.15);
+            overflow-y: auto;
+            padding: 2rem;
         }
 
-        .form-group {
+        .service-card-front:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .service-brief {
+            color: #4a4a4a;
+            font-size: 1rem;
+            line-height: 1.6;
             margin-bottom: 1.5rem;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #000000;
-            font-weight: 500;
-            font-size: 1rem;
+        .service-details {
+            text-align: left;
+            color: #333;
         }
 
-        .form-control {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid rgba(74, 144, 226, 0.5);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
+        .service-details h4 {
             color: #1a1a1a;
-            font-size: 1rem;
-            transition: all 0.3s;
+            margin: 1rem 0;
+            font-size: 1.2rem;
         }
 
-        .form-control:hover {
-            border-color: rgba(74, 144, 226, 0.7);
+        .service-details ul {
+            list-style-type: none;
+            padding: 0;
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: rgba(74, 144, 226, 0.9);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .budget-select {
+        .service-details li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
             position: relative;
         }
 
-        .budget-select select {
-            appearance: none;
-            width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(74, 144, 226, 0.5);
-            border-radius: 8px;
-            color: #000000;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s;
+        .service-details li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #666;
         }
 
-        .budget-select select:focus {
-            outline: none;
-            border-color: rgba(74, 144, 226, 0.9);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .budget-select select option {
-            background: #ffffff;
+        .flip-card-btn {
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
             color: #1a1a1a;
-            padding: 0.5rem;
-        }
-
-        .budget {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid rgba(74, 144, 226, 0.5);
-            border-radius: 8px;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1em;
-            padding-right: 2.5rem;
-        }
-
-        .budget:hover {
-            border-color: rgba(74, 144, 226, 0.7);
-            background-color: #ffffff;
-        }
-
-        .budget:focus {
-            outline: none;
-            border-color: rgba(74, 144, 226, 0.9);
-            background-color: #ffffff;
-        }
-
-        .budget option {
-            color: #1a1a1a;
-            background-color: #ffffff;
-            padding: 0.5rem;
-        }
-
-        .submit-btn {
-            background: linear-gradient(45deg, #4a90e2, #67b26f);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
             font-weight: 500;
-            transition: transform 0.3s ease;
+            cursor: pointer;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            margin-top: 1.5rem;
+            backdrop-filter: blur(5px);
+            -webkit-tap-highlight-color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                120deg,
-                transparent,
-                rgba(255, 255, 255, 0.4),
-                transparent
-            );
-            transition: 0.5s;
+        .flip-card-btn::after {
+            content: '→';
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(-20px);
         }
 
-        .submit-btn:hover {
-            transform: translateY(-3px);
+        .flip-card-btn:hover::after {
+            opacity: 1;
+            transform: translateX(4px);
         }
 
-        .submit-btn:hover::before {
-            left: 100%;
-            transition: 0.5s;
+        .flip-card-btn span {
+            display: inline-block;
+            transition: transform 0.3s ease;
         }
 
-        @media (max-width: 768px) {
-            .contact-title {
-                font-size: 3rem;
-            }
-            .contact-form {
-                padding: 2rem;
-            }
+        .flip-card-btn:hover span {
+            transform: translateX(-4px);
+        }
+
+        .service-card-back .flip-card-btn::after {
+            content: '←';
+            transform: translateX(20px);
+        }
+
+        .service-card-back .flip-card-btn:hover::after {
+            transform: translateX(-4px);
+        }
+
+        .service-card-back .flip-card-btn:hover span {
+            transform: translateX(4px);
         }
     </style>
 </head>
@@ -719,18 +736,17 @@
             <div class="clock" id="clock"></div>
         </div>
         <div class="nav-links">
-            <a href="#home">Accueil</a>
+            <a href="#home">Home</a>
             <a href="#services">Services</a>
             <a href="#about">About</a>
-            <a href="#contact">Contact</a>
         </div>
     </nav>
 
     <!-- Scroll Indicator -->
     <div class="scroll-indicator">
-        <div class="scroll-dot active" data-tooltip="Accueil" data-section="home"></div>
+        <div class="scroll-dot active" data-tooltip="Home" data-section="home"></div>
         <div class="scroll-dot" data-tooltip="Services" data-section="services"></div>
-        <div class="scroll-dot" data-tooltip="Contact" data-section="contact"></div>
+        <div class="scroll-dot" data-tooltip="About" data-section="about"></div>
     </div>
 
     <div class="scroll-container">
@@ -742,8 +758,8 @@
                 <div class="buttons">
                     <a href="#services" class="button primary">Our Services</a>
                     <div class="button-group">
-                        <a href="#contact" class="button">Contact Us</a>
-                        <button class="icon-btn" aria-label="Additional options">
+                        <a href="#about" class="button">About Us</a>
+                        <aria-label="Additional options">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>
                             </svg>
@@ -760,63 +776,132 @@
 
         <!-- Services Section -->
         <section id="services" class="scroll-section services-section">
-            <h2 class="services-title">Nos Services</h2>
+            <h2 class="services-title">Our Services</h2>
             <div class="services-grid">
                 <div class="service-card">
-                    <div class="stats">+25%</div>
+                    <div class="stats">+35%</div>
                     <div class="icon">🎨</div>
-                    <h3>Design Innovant</h3>
-                    <p>Création de designs modernes et innovants adaptés à votre image de marque et vos objectifs commerciaux.</p>
+                    <h3>Innovative Design</h3>
+                    <p>Creation of customized, modern and innovative logos, perfectly adapted to your brand image and business objectives.</p>
                 </div>
                 <div class="service-card">
-                    <div class="stats">+40%</div>
+                    <div class="stats">+80%</div>
                     <div class="icon">💻</div>
-                    <h3>Développement Web</h3>
-                    <p>Solutions web personnalisées utilisant les dernières technologies pour une expérience utilisateur optimale.</p>
+                    <h3>Web Development</h3>
+                    <p>Customized web solutions using the latest technologies for an optimal user experience.</p>
                 </div>
                 <div class="service-card">
-                    <div class="stats">+15%</div>
-                    <div class="icon">📱</div>
-                    <h3>Applications Mobiles</h3>
-                    <p>Développement d'applications mobiles intuitives et performantes pour iOS et Android.</p>
+                    <div class="stats">+65%</div>
+                    <div class="icon">🤖</div>
+                    <h3>AI Chatbot</h3>
+                    <p>Automated chatbot for WhatsApp, Instagram etc... with customized responses from your documents.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="scroll-section contact-section">
-            <h2 class="contact-title">Nous contacter</h2>
-            <form class="contact-form">
-                <div class="form-group">
-                    <label for="name">Nom Complet</label>
-                    <input type="text" id="name" class="form-control" placeholder="David Leroix">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" class="form-control" placeholder="contact@agencypro.fr">
-                </div>
-                <div class="form-group">
-                    <label for="subject">Sujet</label>
-                    <input type="text" id="subject" class="form-control" placeholder="Chatbot IA - Immobilier">
-                </div>
-                <div class="form-group">
-                    <label for="message">Comment pouvons-nous vous aider ?</label>
-                    <textarea id="message" class="form-control" placeholder="Détaillez votre projet"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="budget">Quel est votre budget pour ce project ?</label>
-                    <div class="budget-select">
-                        <select id="budget" class="budget">
-                            <option value="">Sélectionnez votre budget</option>
-                            <option value="5000-10000">5 000€ - 10 000€</option>
-                            <option value="10000-20000">10 000€ - 20 000€</option>
-                            <option value="20000-50000">20 000€ - 50 000€</option>
-                            <option value="50000+">50 000€ +</option>
-                        </select>
+        <!-- About Section -->
+        <section id="about" class="scroll-section">
+            <div class="about-content">
+                <h2 class="about-title">About Evoscape</h2>
+                <div class="about-description">
+                    <p>In today's rapidly evolving digital landscape, Evoscape stands at the forefront of AI-driven business solutions, empowering companies to streamline communication and enhance customer engagement through cutting-edge technological innovations.</p>
+                    
+                    <div class="services-list">
+                        <div class="service-card-container">
+                            <div class="service-card-front">
+                                <div class="service-icon">🎨</div>
+                                <h3 class="service-title">Website Design</h3>
+                                <p class="service-brief">Creating stunning, responsive websites that combine aesthetics with intelligent functionality.</p>
+                                <button class="flip-card-btn">Learn More</button>
+                            </div>
+                            <div class="service-card-back">
+                                <div class="service-details">
+                                    <h4>Our Web Design Process</h4>
+                                    <ul>
+                                        <li>Custom UI/UX Design tailored to your brand</li>
+                                        <li>Responsive layouts for all devices</li>
+                                        <li>Performance optimization</li>
+                                        <li>SEO-friendly architecture</li>
+                                        <li>Integration with modern frameworks</li>
+                                        <li>Analytics and user behavior tracking</li>
+                                    </ul>
+                                    <h4>Technologies</h4>
+                                    <ul>
+                                        <li>React.js & Next.js for dynamic interfaces</li>
+                                        <li>TailwindCSS for modern styling</li>
+                                        <li>WebGL for interactive animations</li>
+                                    </ul>
+                                </div>
+                                <button class="flip-card-btn">Back</button>
+                            </div>
+                        </div>
+
+                        <div class="service-card-container">
+                            <div class="service-card-front">
+                                <div class="service-icon">🤖</div>
+                                <h3 class="service-title">AI Chatbots</h3>
+                                <p class="service-brief">Intelligent conversational agents that transform customer interactions across platforms.</p>
+                                <button class="flip-card-btn">Learn More</button>
+                            </div>
+                            <div class="service-card-back">
+                                <div class="service-details">
+                                    <h4>Chatbot Features</h4>
+                                    <ul>
+                                        <li>Natural Language Processing</li>
+                                        <li>Multi-platform integration</li>
+                                        <li>24/7 automated responses</li>
+                                        <li>Custom knowledge base integration</li>
+                                        <li>Learning from interactions</li>
+                                        <li>Analytics and insights dashboard</li>
+                                    </ul>
+                                    <h4>Platforms Supported</h4>
+                                    <ul>
+                                        <li>Website live chat integration</li>
+                                        <li>WhatsApp Business API</li>
+                                        <li>Facebook Messenger</li>
+                                        <li>Instagram Direct Messages</li>
+                                    </ul>
+                                </div>
+                                <button class="flip-card-btn">Back</button>
+                            </div>
+                        </div>
+
+                        <div class="service-card-container">
+                            <div class="service-card-front">
+                                <div class="service-icon">✨</div>
+                                <h3 class="service-title">Logo & Animation</h3>
+                                <p class="service-brief">Bringing brands to life through creative design and captivating motion.</p>
+                                <button class="flip-card-btn">Learn More</button>
+                            </div>
+                            <div class="service-card-back">
+                                <div class="service-details">
+                                    <h4>Design Services</h4>
+                                    <ul>
+                                        <li>Custom logo design</li>
+                                        <li>Brand identity development</li>
+                                        <li>Motion graphics and animation</li>
+                                        <li>3D logo animations</li>
+                                        <li>Social media assets</li>
+                                        <li>Brand guidelines</li>
+                                    </ul>
+                                    <h4>Animation Specialties</h4>
+                                    <ul>
+                                        <li>Logo reveal animations</li>
+                                        <li>Character animation</li>
+                                        <li>UI/UX micro-interactions</li>
+                                        <li>Social media motion graphics</li>
+                                    </ul>
+                                </div>
+                                <button class="flip-card-btn">Back</button>
+                            </div>
+                        </div>
                     </div>
+
+                    <p style="margin-top: 3rem;">At Evoscape, we believe that intelligent automation is not about replacing human interaction but enhancing it. Our solutions are meticulously crafted to understand context, learn from interactions, and provide increasingly refined customer experiences.</p>
+                    
+                    <p>Leveraging state-of-the-art machine learning and natural language processing, Evoscape helps businesses of all sizes unlock unprecedented efficiency and engagement potential.</p>
                 </div>
-                <button type="submit" class="submit-btn">Envoyer</button>
-            </form>
+            </div>
         </section>
     </div>
 
@@ -972,6 +1057,22 @@
         // Update clock immediately and then every second
         updateClock();
         setInterval(updateClock, 1000);
+
+        // Card flip functionality
+        document.querySelectorAll('.service-card-container').forEach(card => {
+            const frontBtn = card.querySelector('.service-card-front .flip-card-btn');
+            const backBtn = card.querySelector('.service-card-back .flip-card-btn');
+            
+            frontBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                card.classList.add('flipped');
+            });
+            
+            backBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                card.classList.remove('flipped');
+            });
+        });
 
         // Initialize
         createStars();
